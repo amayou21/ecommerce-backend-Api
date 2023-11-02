@@ -4,7 +4,7 @@ const morgan = require("morgan");
 const dbConnection = require("./config/databse");
 const categoryRoute = require("./routes/categoryRoute");
 const ApiError = require("./utility/apiError");
-const globalError = require("./utility/globalError");
+const globalError = require("./middleware/globalError");
 
 // if you create file with the name "config.env" u gonna have to set the dote env configs
 dotenv.config({ path: "config.env" });

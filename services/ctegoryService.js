@@ -11,9 +11,7 @@ exports.getCategories = asyncHandler(async (req, res, next) => {
   const { limit } = req.query || 5;
   const skip = (page - 1) * limit;
   const categories = await CategoryModel.find().skip(skip).limit(limit);
-  !categories
-    ? next(new ApiError("there's no categories",400))
-    : res.status(200).json({ result: categories.length, page, categories });
+  res.status(200).json({ result: categories.length, page, categories });
 });
 
 // @desc    create category
