@@ -3,6 +3,8 @@ const dotenv = require("dotenv");
 const morgan = require("morgan");
 const dbConnection = require("./config/databse");
 const categoryRoute = require("./routes/categoryRoute");
+const ApiError = require("./utility/apiError");
+const globalError = require("./utility/globalError");
 
 // if you create file with the name "config.env" u gonna have to set the dote env configs
 dotenv.config({ path: "config.env" });
@@ -23,6 +25,13 @@ if (process.env.MODE === "developement") {
 
 // Mount routes
 app.use("/api/v1/categories", categoryRoute);
+
+app.all("*", (req, res, next) => {
+  next(new ApiError(`we can't fin this route : ${req.originalUrl}`, 400));
+});
+
+// Global error handling middleware
+app.use(globalError);
 
 // runing server with listen port
 app.listen(process.env.PORT, () => {

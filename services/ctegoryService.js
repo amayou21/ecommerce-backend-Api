@@ -1,22 +1,25 @@
 const { default: slugify } = require("slugify");
 const { CategoryModel } = require("../models/CategoryModels");
 const asyncHandler = require("express-async-handler");
+const ApiError = require("../utility/apiError");
 
 // @desc    get list of categories
 // @route   get api/v1//categories
 // @access  Public
-exports.getCategories = async (req, res) => {
+exports.getCategories = asyncHandler(async (req, res, next) => {
   const { page } = req.query || 1;
   const { limit } = req.query || 5;
   const skip = (page - 1) * limit;
   const categories = await CategoryModel.find().skip(skip).limit(limit);
-  res.status(200).json({ result: categories.length, page, categories });
-};
+  !categories
+    ? next(new ApiError("there's no categories",400))
+    : res.status(200).json({ result: categories.length, page, categories });
+});
 
 // @desc    create category
 // @route   post apiv/categories
 // @access  Private
-exports.createCategories = asyncHandler(async (req, res) => {
+exports.createCategories = asyncHandler(async (req, res, next) => {
   const { name } = req.body;
   const newCategory = await CategoryModel.create({ name, slug: slugify(name) });
   res.status(200).json(newCategory);
@@ -25,19 +28,18 @@ exports.createCategories = asyncHandler(async (req, res) => {
 // @desc    get spesific category
 // @route   put  /api/v1/categories/:id
 // @access  Public
-exports.getSpesificCategory = asyncHandler(async (req, res) => {
+exports.getSpesificCategory = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   const category = await CategoryModel.findById({ _id: id });
   !category
-    ? res.status(404).send({ message: `no ctegory with this is : ${id}` })
-    : null;
-  res.status(200).json(category);
+    ? next(new ApiError(`no ctegory with this is : ${id}`, 400))
+    : res.status(200).json(category);
 });
 
 // @desc    update spesific category
 // @route   put /api/v1/categories/:id
 // @access  Private
-exports.updateSpesificCategory = asyncHandler(async (req, res) => {
+exports.updateSpesificCategory = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   const { name } = req.body;
   const upCategory = await CategoryModel.findOneAndUpdate(
@@ -48,21 +50,19 @@ exports.updateSpesificCategory = asyncHandler(async (req, res) => {
     }
   );
   !upCategory
-    ? res.status(404).json({ mes: `there's no category with this id :${id}` })
-    : null;
-  res.status(200).json(upCategory);
+    ? next(new ApiError(`no ctegory with this is : ${id}`, 400))
+    : res.status(200).json(upCategory);
 });
 
 // @desc     delete spesific category
 // @route    delete /api/v1/categories/:id
 // @access   Private
-exports.deleteSpesificCategory = asyncHandler(async (req, res) => {
+exports.deleteSpesificCategory = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   const category = await CategoryModel.findByIdAndDelete({ _id: id });
   !category
-    ? res.status(404).json({ mes: `there's no category with this id :${id}` })
-    : null;
-  res
-    .status(200)
-    .json({ mes: `the category with id :${id} deleted successfully` });
+    ? next(new ApiError(`no ctegory with this is : ${id}`, 400))
+    : res
+        .status(200)
+        .json({ mes: `the category with id :${id} deleted successfully` });
 });
