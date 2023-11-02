@@ -4,14 +4,9 @@ const globalError = (err, req, res, next) => {
   process.env.NODE_ENV === "developement"
     ? sendErrorForDev(err, res)
     : sendErrorForProd(err, res);
-  // res.status(err.statusCode).json({
-  //   tatus: err.status,
-  //   message: err.message,
-  //   error: err,
-  //   stack: err.stack,
-  // });
 };
 
+// @desc  error for developement mode
 const sendErrorForDev = (err, res) => {
   return res.status(err.statusCode).json({
     tatus: err.status,
@@ -21,10 +16,12 @@ const sendErrorForDev = (err, res) => {
   });
 };
 
+// @desc   error for production mode
 const sendErrorForProd = (err, res) => {
   return res.status(err.statusCode).json({
     tatus: err.status,
     message: err.message,
   });
 };
+
 module.exports = globalError;
