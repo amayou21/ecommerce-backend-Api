@@ -9,7 +9,7 @@ const globalError = (err, req, res, next) => {
 // @desc  error for developement mode
 const sendErrorForDev = (err, res) => {
   return res.status(err.statusCode).json({
-    tatus: err.status,
+    status: err.status,
     message: err.message,
     error: err,
     stack: err.stack,
