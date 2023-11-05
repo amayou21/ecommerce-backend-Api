@@ -1,7 +1,8 @@
 const { check } = require("express-validator");
 const ValidatoreMiddleware = require("../../middleware/validatoreMiddleware");
 
-exports.categoryValidator = [
+// @desc    errors validator outside express for create category middleware
+exports.createCategoryValidator = [
   // @desc  1-rules
   check("name")
     .notEmpty()
@@ -15,6 +16,15 @@ exports.categoryValidator = [
 ];
 
 exports.getSpesificCategoryValidator = [
-  check("id").isMongoId().withMessage("invalid Id"),
+  check("id").isMongoId().withMessage("invalid category Id format"),
+  ValidatoreMiddleware,
+];
+
+exports.updateCategoryValidator = [
+  check("id").isMongoId().withMessage("invalid category Id format"),
+  ValidatoreMiddleware,
+];
+exports.deleteCategoryValidator = [
+  check("id").isMongoId().withMessage("invalid category Id format"),
   ValidatoreMiddleware,
 ];

@@ -8,17 +8,22 @@ const {
 } = require("../services/ctegoryService");
 
 const {
-  categoryValidator,
   getSpesificCategoryValidator,
+  createCategoryValidator,
+  updateCategoryValidator,
+  deleteCategoryValidator,
 } = require("../utility/validators/categoryValidator");
 
 const router = express.Router();
 
-router.route("/").get(getCategories).post(categoryValidator, createCategories);
+router
+  .route("/")
+  .get(getCategories)
+  .post(createCategoryValidator, createCategories);
 router
   .route("/:id")
   .get(getSpesificCategoryValidator, getSpesificCategory)
-  .put(updateSpesificCategory)
-  .delete(deleteSpesificCategory);
+  .put(updateCategoryValidator, updateSpesificCategory)
+  .delete(deleteCategoryValidator, deleteSpesificCategory);
 
 module.exports = router;
