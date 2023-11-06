@@ -44,18 +44,6 @@ exports.updateSpesificSubCategoryValidator = [
     .withMessage("Invalid category Id! ")
     .notEmpty()
     .withMessage("parent category is required"),
-  // asyncHandler(async (req, res, next) => {
-  //   const categoryId = req.body.category;
-  //   const category = await CategoryModel.findById({ _id: categoryId });
-  //   !category
-  //     ? next(
-  //         new ApiError(
-  //           `the category with id :${categoryId} doesn't exist!!`,
-  //           404
-  //         )
-  //       )
-  //     : next();
-  // }),
   ValidatoreMiddleware,
 ];
 
