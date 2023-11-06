@@ -4,6 +4,7 @@ const morgan = require("morgan");
 const dbConnection = require("./config/databse");
 const categoryRoute = require("./routes/categoryRoute");
 const subcategoryRoute = require("./routes/subCategoryRoute");
+const brandsRoute = require("./routes/brandsRoute");
 const ApiError = require("./utility/apiError");
 const globalError = require("./middleware/globalError");
 
@@ -27,6 +28,7 @@ if (process.env.MODE === "developement") {
 // Mount routes
 app.use("/api/v1/categories", categoryRoute);
 app.use("/api/v1/subcategories", subcategoryRoute);
+app.use("/api/v1/brands", brandsRoute);
 
 app.all("*", (req, res, next) => {
   next(new ApiError(`we can't fin this route : ${req.originalUrl}`, 400));
