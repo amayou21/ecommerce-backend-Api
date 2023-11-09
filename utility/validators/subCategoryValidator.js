@@ -43,7 +43,11 @@ exports.updateSpesificSubCategoryValidator = [
     .isMongoId()
     .withMessage("Invalid category Id! ")
     .notEmpty()
-    .withMessage("parent category is required"),
+    .withMessage("parent category is required")
+    .custom(async (categoryID) => {
+      const category = await CategoryModel.findById(categoryID);
+      if (!category) throw new Error("no category with this id");
+    }),
   ValidatoreMiddleware,
 ];
 

@@ -24,7 +24,7 @@ exports.createSubCategory = asyncHandler(async (req, res, next) => {
 
 exports.setFillterObject = asyncHandler(async (req, res, next) => {
   // let filterObject = {};
-  req.params.categoryId ? (req.filterObject = req.params.categoryId) : null;
+  if (req.params.categoryId) req.filterObject = req.params.categoryId;
   next();
 });
 
@@ -35,11 +35,9 @@ exports.getSubCategories = asyncHandler(async (req, res, next) => {
   const { page } = req.query || 1;
   const { limit } = req.query || 5;
   const skip = (page - 1) * limit;
-  // let filterObject = {};
-  // req.params.categoryId
-  //   ? (filterObject = { category: req.params.categoryId })
-  //   : null;
-  const subCategories = await SUbCategoryModele.find({category:req.filterObject})
+  const subCategories = await SUbCategoryModele.find(
+    {category:req.filterObject}
+  )
     .skip(skip)
     .limit(limit);
   // .populate({ path: "category", select: "name -_id" });

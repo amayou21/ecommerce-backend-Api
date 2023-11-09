@@ -4,10 +4,11 @@ const ProductSchema = new mongoose.Schema(
   {
     title: {
       type: String,
+      unique: true,
       required: [true, "product title is required"],
       trime: true,
-      minLength: [3, "Too short Product decsription"],
-      maxLength: [100, "Too long Product description"],
+      minLength: [3, "Too short Product title"],
+      maxLength: [100, "Too long Product title"],
     },
     slug: {
       type: String,
@@ -19,7 +20,7 @@ const ProductSchema = new mongoose.Schema(
       required: [true, "Product descreption is required"],
       minLength: [20, "Too short Product description"],
     },
-    Quantity: {
+    quantity: {
       type: Number,
       required: [true, "Product Quantity is required"],
     },
@@ -48,10 +49,10 @@ const ProductSchema = new mongoose.Schema(
       ref: "Category",
       required: [true, "Product must be belong to category"],
     },
-    subcategory: {
+    subcategory: [{
       type: mongoose.Schema.ObjectId,
       ref: "SubCategory",
-    },
+    }],
     brand: {
       type: mongoose.Schema.ObjectId,
       ref: "Brand",
@@ -68,3 +69,5 @@ const ProductSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+module.exports = mongoose.model("Product", ProductSchema);
