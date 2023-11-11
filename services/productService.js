@@ -38,11 +38,10 @@ exports.getProducts = asyncHandler(async (req, res, next) => {
   let mongooseQuery = ProductModel.find(quertStr)
     .skip(skip)
     .limit(limit)
-    .populate({
-      path: "category",
-      select: "name -_id",
-    })
-    .select("-category");
+    // .populate({
+    //   path: "category",
+    //   select: "name -_id",
+    // });
 
   // sorting products
 
@@ -55,13 +54,12 @@ exports.getProducts = asyncHandler(async (req, res, next) => {
     mongooseQuery = mongooseQuery.sort("createdAt");
   }
 
-  // if (req.query.fields) {
-  //   console.log(JSON.stringify(req.query.fields.split(",").join(" ")) );
-  //   const fieldsStr = req.query.fields.split(",").join(" ");
-  //   mongooseQuery = mongooseQuery.select("title");
-  // } else {
-  //   mongooseQuery = mongooseQuery.select("-__v");
-  // }
+  if (req.query.field) {
+    const fieldsStr = req.query.field.split(",").join(" ");
+    mongooseQuery = mongooseQuery.select(fieldsStr);
+  } else {
+    mongooseQuery = mongooseQuery.select("-__v");
+  }
 
   //execute query
   const products = await mongooseQuery;
