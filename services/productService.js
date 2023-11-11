@@ -25,7 +25,9 @@ exports.getProducts = asyncHandler(async (req, res, next) => {
   // Apply filteration usin [gte,gt,lte,lt]
   let quertStr = JSON.stringify(queryStringObjc);
 
-  quertStr = JSON.parse(quertStr.replace(/\b(gte|gt|lte|lt)\b/g, (val) => `$${val}`));
+  quertStr = JSON.parse(
+    quertStr.replace(/\b(gte|gt|lte|lt)\b/g, (val) => `$${val}`)
+  );
 
   // 2) pagination
   const { page } = req.query || 1;
@@ -33,13 +35,33 @@ exports.getProducts = asyncHandler(async (req, res, next) => {
   const skip = (page - 1) * limit;
 
   //build query
-  const mongooseQuery = ProductModel.find(quertStr)
+  let mongooseQuery = ProductModel.find(quertStr)
     .skip(skip)
     .limit(limit)
     .populate({
       path: "category",
       select: "name -_id",
-    });
+    })
+    .select("-category");
+
+  // sorting products
+
+  // console.log(req.query.sort.split(",").join(" "));
+
+  if (req.query.sort) {
+    const sortBy = req.query.sort.split(",").join(" ");
+    mongooseQuery = mongooseQuery.sort(sortBy);
+  } else {
+    mongooseQuery = mongooseQuery.sort("createdAt");
+  }
+
+  // if (req.query.fields) {
+  //   console.log(JSON.stringify(req.query.fields.split(",").join(" ")) );
+  //   const fieldsStr = req.query.fields.split(",").join(" ");
+  //   mongooseQuery = mongooseQuery.select("title");
+  // } else {
+  //   mongooseQuery = mongooseQuery.select("-__v");
+  // }
 
   //execute query
   const products = await mongooseQuery;
