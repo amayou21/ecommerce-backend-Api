@@ -1,8 +1,7 @@
 const { check } = require("express-validator");
 const ValidatoreMiddleware = require("../../middleware/validatoreMiddleware");
 const { CategoryModel } = require("../../models/CategoryModels");
-const ApiError = require("../apiError");
-const asyncHandler = require("express-async-handler");
+const { default: slugify } = require("slugify");
 exports.createSubCategoryValidator = [
   check("name")
     .notEmpty()
@@ -10,7 +9,11 @@ exports.createSubCategoryValidator = [
     .isLength({ max: 32 })
     .withMessage("Too long subCategory name")
     .isLength({ min: 2 })
-    .withMessage("Too short category name"),
+    .withMessage("Too short category name")
+    .custom((val, { req }) => {
+      req.body.slug = slugify(val);
+      return true;
+    }),
   check("category")
     .isMongoId()
     .withMessage("inccorrect category id! ")
@@ -33,12 +36,15 @@ exports.getSpesificSubCategoryValidator = [
 exports.updateSpesificSubCategoryValidator = [
   check("id").isMongoId().withMessage("Invalid SubCategory Id format"),
   check("name")
-    .notEmpty()
-    .withMessage("subCategory name is required")
+    .optional()
     .isLength({ max: 32 })
     .withMessage("Too long subCategory name")
     .isLength({ min: 2 })
-    .withMessage("Too short category name"),
+    .withMessage("Too short category name")
+    .custom((val, { req }) => {
+      req.body.slug = slugify(val);
+      return true;
+    }),
   check("category")
     .isMongoId()
     .withMessage("Invalid category Id! ")

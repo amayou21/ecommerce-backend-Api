@@ -2,6 +2,7 @@ const { check } = require("express-validator");
 const ValidatoreMiddleware = require("../../middleware/validatoreMiddleware");
 const { CategoryModel } = require("../../models/CategoryModels");
 const SUbCategoryModele = require("../../models/SUbCategoryModele");
+const { default: slugify } = require("slugify");
 
 exports.createProductValidator = [
   check("title")
@@ -10,7 +11,11 @@ exports.createProductValidator = [
     .isLength({ max: 100 })
     .withMessage("Too long Product title")
     .isLength({ min: 3 })
-    .withMessage("Too short Product title"),
+    .withMessage("Too short Product title")
+    .custom((val, { req }) => {
+      req.body.slug = slugify(val);
+      return true;
+    }),
   check("description")
     .notEmpty()
     .withMessage("product descreption is required")
@@ -55,6 +60,7 @@ exports.createProductValidator = [
     .custom(async (categoryID) => {
       const category = await CategoryModel.findById(categoryID);
       if (!category) throw new Error("no category with this id");
+      return true;
     }),
   check("subcategory")
     .optional()
@@ -105,11 +111,24 @@ exports.getProductValidator = [
 ];
 
 exports.updateProductValidator = [
+  check("title")
+    .optional()
+    .custom((val, { req }) => {
+      req.body.slug = slugify(val);
+      return true;
+    }),
   check("id")
     .isMongoId()
     .withMessage("Invalid Product Id")
     .notEmpty()
     .withMessage("must be passt an Id to get spesific Product"),
+  check("category")
+    .optional()
+    .custom(async (categoryID) => {
+      const category = await CategoryModel.findById(categoryID);
+      if (!category) throw new Error("no category with this id");
+      return true;
+    }),
   ValidatoreMiddleware,
 ];
 

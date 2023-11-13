@@ -1,5 +1,6 @@
-const { check } = require("express-validator");
+const { check, body } = require("express-validator");
 const ValidatoreMiddleware = require("../../middleware/validatoreMiddleware");
+const { default: slugify } = require("slugify");
 
 // @desc    errors validator outside express for create category middleware
 exports.createCategoryValidator = [
@@ -10,7 +11,11 @@ exports.createCategoryValidator = [
     .isLength({ max: 32 })
     .withMessage("too long category name")
     .isLength({ min: 3 })
-    .withMessage("too short category name"),
+    .withMessage("too short category name")
+    .custom((val, { req }) => {
+      req.body.slug = slugify(val);
+      return true;
+    }),
   // @desc  2- catch errors if the rules not exist
   ValidatoreMiddleware,
 ];
@@ -21,7 +26,19 @@ exports.getSpesificCategoryValidator = [
 ];
 
 exports.updateCategoryValidator = [
-  check("id").isMongoId().withMessage("invalid category Id format"),
+  check("id")
+    .isMongoId()
+    .withMessage("invalid category Id format")
+    .custom((val, { req }) => {
+      req.body.slug = slugify(val);
+      return true;
+    }),
+  body("name")
+    .optional()
+    .custom((val, { req }) => {
+      req.body.slug = slugify(val);
+      return true;
+    }),
   ValidatoreMiddleware,
 ];
 exports.deleteCategoryValidator = [
