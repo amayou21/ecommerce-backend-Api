@@ -7,7 +7,10 @@ const {
 } = require("../middleware/uploadImageMiddelware");
 
 // @desc   upload one image or more using multer fields
-exports.uploadimage = uploadGalleryOfImages("imageCover", "images");
+exports.uploadimage = uploadGalleryOfImages([
+  { name: "imageCover", maxCount: 1 },
+  { name: "images", maxCount: 4 },
+]);
 
 // @desc resizing product images
 exports.resizeImage = resizeProductImages;
