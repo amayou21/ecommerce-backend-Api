@@ -21,5 +21,23 @@ const CategorySchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+// @desc  set image url
+const imageUrld = (doc) => {
+  if (doc.image) {
+    const imageUrl = doc.image;
+    doc.image = `${process.env.BASE_URL}/categories/${imageUrl}`;
+  }
+};
+
+// getOne ,getAll and update
+CategorySchema.post("init", (doc) => {
+  imageUrld(doc);
+});
+
+// create
+CategorySchema.post("save", (doc) => {
+  imageUrld(doc);
+});
+
 // 2- convert schema to model to apply some query
 exports.CategoryModel = mongoose.model("Category", CategorySchema);

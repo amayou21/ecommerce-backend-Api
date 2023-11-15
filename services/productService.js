@@ -1,6 +1,17 @@
 const ProductModel = require("../models/ProductModel");
 const factory = require("./handleFactory");
 
+const {
+  uploadGalleryOfImages,
+  resizeProductImages,
+} = require("../middleware/uploadImageMiddelware");
+
+// @desc   upload one image or more using multer fields
+exports.uploadimage = uploadGalleryOfImages("imageCover", "images");
+
+// @desc resizing product images
+exports.resizeImage = resizeProductImages;
+
 // @desc     create product
 // @route    post  /api/v1/products
 // @access   Private

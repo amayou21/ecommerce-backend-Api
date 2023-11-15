@@ -46,6 +46,7 @@ exports.updateSpesificSubCategoryValidator = [
       return true;
     }),
   check("category")
+    .optional()
     .isMongoId()
     .withMessage("Invalid category Id! ")
     .notEmpty()

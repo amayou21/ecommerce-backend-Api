@@ -26,14 +26,9 @@ exports.getSpesificCategoryValidator = [
 ];
 
 exports.updateCategoryValidator = [
-  check("id")
-    .isMongoId()
-    .withMessage("invalid category Id format")
-    .custom((val, { req }) => {
-      req.body.slug = slugify(val);
-      return true;
-    }),
-  body("name")
+  check("id").isMongoId().withMessage("invalid category Id format"),
+
+  check("name")
     .optional()
     .custom((val, { req }) => {
       req.body.slug = slugify(val);

@@ -22,5 +22,26 @@ const BrandSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+
+
+// @desc  set image url
+const imageUrld=(doc)=>{
+  if (doc.image) {
+    const imageUrl = doc.image;
+    doc.image = `${process.env.BASE_URL}/brands/${imageUrl}`;
+  }
+}
+
+// getOne ,getAll and update
+BrandSchema.post("init", (doc) => {
+  imageUrld(doc)
+});
+
+// create
+BrandSchema.post("save", (doc) => {
+  imageUrld(doc)
+
+});
+
 // 2- convert schema to model to apply some query
 exports.BrandModel = mongoose.model("Brand", BrandSchema);

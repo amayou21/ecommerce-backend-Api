@@ -1,7 +1,27 @@
 const asyncHandler = require("express-async-handler");
 const SUbCategoryModele = require("../models/SUbCategoryModele");
 const factory = require("./handleFactory");
+const { uploadSingleImage } = require("../middleware/uploadImageMiddelware");
+const { v4: uuidv4 } = require("uuid");
+const sharp = require("sharp");
 
+// @desc  image uploading
+exports.uploadImage = uploadSingleImage("image");
+
+// @desc  image proccessing
+exports.resizeImage = asyncHandler(async (req, res, next) => {
+  const fileName = `subcategory-${uuidv4()}-${Date.now()}.jpeg`;
+  await sharp(req.file.buffer)
+    .resize(900, 600)
+    .toFormat("jpeg")
+    .jpeg({ quality: 100 })
+    .toFile(`uploads/subcategories/${fileName}`);
+  console.log(res.errored);
+  req.body.image = fileName;
+  next();
+});
+
+// @desc   set category ID if I create a subcategory in spesific category
 exports.setCategoryID = asyncHandler(async (req, res, next) => {
   req.params.categoryId ? (req.body.category = req.params.categoryId) : null;
   next();
