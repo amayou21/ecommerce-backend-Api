@@ -28,6 +28,15 @@ if (process.env.MODE === "developement") {
   console.log(`mode :${process.env.MODE}`);
 }
 
+
+// Enable CORS for all routes
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  next();
+});
+
 // Mount routes
 app.use("/api/v1/categories", categoryRoute);
 app.use("/api/v1/subcategories", subcategoryRoute);
