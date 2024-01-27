@@ -1,6 +1,7 @@
 const { check, body } = require("express-validator");
 const ValidatoreMiddleware = require("../../middleware/validatoreMiddleware");
 const { default: slugify } = require("slugify");
+const { CategoryModel } = require("../../models/CategoryModels");
 
 // @desc    errors validator outside express for create category middleware
 exports.createCategoryValidator = [
@@ -14,6 +15,19 @@ exports.createCategoryValidator = [
     .withMessage("too short category name")
     .custom((val, { req }) => {
       req.body.slug = slugify(val);
+      return true;
+    })
+    // check if the name value
+    .custom(val => {
+      if (!isNaN(val) || !isNaN(parseFloat(val)))
+        throw new Error(`category name must be a string`)
+      return true
+    })
+    .custom(async (value) => {
+      const existingCategory = await CategoryModel.findOne({ name: value });
+      if (existingCategory) {
+        throw new Error("This category already exists");
+      }
       return true;
     }),
   // @desc  2- catch errors if the rules not exist
@@ -32,6 +46,18 @@ exports.updateCategoryValidator = [
     .optional()
     .custom((val, { req }) => {
       req.body.slug = slugify(val);
+      return true;
+    })
+    .custom(val => {
+      if (!isNaN(val) || !isNaN(parseFloat(val)))
+        throw new Error(`category name must be a string`)
+      return true
+    })
+    .custom(async (value) => {
+      const existingCategory = await CategoryModel.findOne({ name: value });
+      if (existingCategory) {
+        throw new Error("This category already exists");
+      }
       return true;
     }),
   ValidatoreMiddleware,

@@ -84,7 +84,7 @@ ProductSchema.pre(/^find/, function (next) {
 const imageUrld = (doc) => {
   if (doc.imageCover) {
     const imageUrl = doc.imageCover;
-    doc.image = `${process.env.BASE_URL}/products/${imageUrl}`;
+    doc.imageCover = `${process.env.BASE_URL}/products/${imageUrl}`;
   }
   if (doc.images) {
     const imagesList = [];

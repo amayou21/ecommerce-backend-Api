@@ -4,13 +4,14 @@ class ApiFeatures {
     this.queryStr = queryStr;
   }
 
+  // @desc fieltering
   fielter() {
     // 1) fieltring
     const queryStringObjc = { ...this.queryStr };
     const execludFields = ["page", "limit", "sort", "field"];
     execludFields.forEach((val) => delete queryStringObjc[val]);
 
-    // Apply filteration usin [gte,gt,lte,lt]
+    // Apply filteration using [gte,gt,lte,lt]
     let quertStr = JSON.stringify(queryStringObjc);
 
     quertStr = JSON.parse(
@@ -33,6 +34,7 @@ class ApiFeatures {
     return this;
   }
 
+  // @desc sorting
   sort() {
     // sorting
     if (this.queryStr.sort) {
@@ -44,6 +46,7 @@ class ApiFeatures {
     return this;
   }
 
+  // @desc return  limit fields
   limitFields() {
     // // fields
     if (this.queryStr.field) {
@@ -54,7 +57,7 @@ class ApiFeatures {
     }
     return this;
   }
-
+  // @desc pagination
   paginate(docemuntCount) {
     // 2) pagination
     const page = this.queryStr.page * 1 || 1;
@@ -63,8 +66,8 @@ class ApiFeatures {
     const endIndex = page * limit;
 
     const pagination = {};
-    pagination.currentPage = page ;
-    pagination.limit = limit ;
+    pagination.currentPage = page;
+    pagination.limit = limit;
     pagination.numberOfPages = Math.ceil(docemuntCount / limit);
 
     // next page
@@ -79,4 +82,5 @@ class ApiFeatures {
     return this;
   }
 }
+
 module.exports = ApiFeatures;

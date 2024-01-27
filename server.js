@@ -9,7 +9,7 @@ const brandsRoute = require("./routes/brandsRoute");
 const ApiError = require("./utility/apiError");
 const globalError = require("./middleware/globalError");
 const ProductRoute = require("./routes/productRoute");
-
+const cors = require("cors");
 // if you create file with the name "config.env" u gonna have to set the dote env configs
 dotenv.config({ path: "config.env" });
 
@@ -21,21 +21,20 @@ dbConnection();
 
 // middelwires
 app.use(express.json());
-app.use(express.static(path.join(__dirname,'uploads')))
+
+// Allow requests from a specific origin (http://localhost:3000 in this case)
+const corsOptions = {
+  origin: "http://localhost:3000",
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+
+app.use(cors(corsOptions));
+app.use(express.static(path.join(__dirname, "uploads")));
 
 if (process.env.MODE === "developement") {
   app.use(morgan("dev"));
   console.log(`mode :${process.env.MODE}`);
 }
-
-
-// Enable CORS for all routes
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, PUT, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  next();
-});
 
 // Mount routes
 app.use("/api/v1/categories", categoryRoute);

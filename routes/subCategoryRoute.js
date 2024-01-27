@@ -6,8 +6,8 @@ const {
   updateSpesificSubCategory,
   deleteSpesificSubCategory,
   setCategoryID,
-  uploadImage,
-  resizeImage,
+  // uploadImage,
+  // resizeImage,
 } = require("../services/SubCategoryService");
 const {
   createSubCategoryValidator,
@@ -22,8 +22,8 @@ router
   .route("/")
   .get(getSubCategoryValidator, getSubCategories)
   .post(
-    uploadImage,
-    resizeImage,
+    // uploadImage,
+    // resizeImage,
     setCategoryID,
     createSubCategoryValidator,
     createSubCategory
@@ -32,8 +32,8 @@ router
   .route("/:id")
   .get(getSpesificSubCategoryValidator, getSpesificSubCategory)
   .put(
-    uploadImage,
-    resizeImage,
+    // uploadImage,
+    // resizeImage,
     updateSpesificSubCategoryValidator,
     updateSpesificSubCategory
   )

@@ -25,7 +25,7 @@ const BrandSchema = new mongoose.Schema(
 
 
 // @desc  set image url
-const imageUrld=(doc)=>{
+const imageUrl = (doc) => {
   if (doc.image) {
     const imageUrl = doc.image;
     doc.image = `${process.env.BASE_URL}/brands/${imageUrl}`;
@@ -34,12 +34,12 @@ const imageUrld=(doc)=>{
 
 // getOne ,getAll and update
 BrandSchema.post("init", (doc) => {
-  imageUrld(doc)
+  imageUrl(doc)
 });
 
 // create
 BrandSchema.post("save", (doc) => {
-  imageUrld(doc)
+  imageUrl(doc)
 
 });
 

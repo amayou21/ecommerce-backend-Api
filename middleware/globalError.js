@@ -19,7 +19,7 @@ const sendErrorForDev = (err, res) => {
 // @desc   error for production mode
 const sendErrorForProd = (err, res) => {
   return res.status(err.statusCode).json({
-    tatus: err.status,
+    status: err.status,
     message: err.message,
   });
 };

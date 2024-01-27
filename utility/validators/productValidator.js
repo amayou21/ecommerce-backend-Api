@@ -3,7 +3,7 @@ const ValidatoreMiddleware = require("../../middleware/validatoreMiddleware");
 const { CategoryModel } = require("../../models/CategoryModels");
 const SUbCategoryModele = require("../../models/SUbCategoryModele");
 const { default: slugify } = require("slugify");
-
+const ProductModel = require("../../models/ProductModel")
 exports.createProductValidator = [
   check("title")
     .notEmpty()
@@ -14,6 +14,18 @@ exports.createProductValidator = [
     .withMessage("Too short Product title")
     .custom((val, { req }) => {
       req.body.slug = slugify(val);
+      return true;
+    })
+    .custom(val => {
+      if (!isNaN(val) || !isNaN(parseFloat(val)))
+        throw new Error(`product name must be a string`)
+      return true
+    })
+    .custom(async (value) => {
+      const existingCategory = await ProductModel.findOne({ name: value });
+      if (existingCategory) {
+        throw new Error("This product already exists");
+      }
       return true;
     }),
   check("description")
@@ -115,6 +127,18 @@ exports.updateProductValidator = [
     .optional()
     .custom((val, { req }) => {
       req.body.slug = slugify(val);
+      return true;
+    })
+    .custom(val => {
+      if (!isNaN(val) || !isNaN(parseFloat(val)))
+        throw new Error(`product name must be a string`)
+      return true
+    })
+    .custom(async (value) => {
+      const existingCategory = await ProductModel.findOne({ name: value });
+      if (existingCategory) {
+        throw new Error("This product already exists");
+      }
       return true;
     }),
   check("id")
