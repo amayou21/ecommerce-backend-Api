@@ -38,7 +38,9 @@ const ProductSchema = new mongoose.Schema(
       type: Number,
       trime: true,
     },
-    colors: [String],
+    colors: {
+      type: [String],
+    },
     imageCover: {
       type: String,
       required: [true, "Product image cover is required"],

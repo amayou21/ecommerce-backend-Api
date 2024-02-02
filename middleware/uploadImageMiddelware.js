@@ -60,6 +60,6 @@ exports.resizeProductImages = asyncHandler(async (req, res, next) => {
       })
     );
 
-    next();
   }
+    next();
 });

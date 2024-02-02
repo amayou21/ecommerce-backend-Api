@@ -22,7 +22,7 @@ exports.getAll = (model) =>
     res.status(200).json({
       paginationResult,
       result: documents.length,
-      documents,
+      documents: documents.reverse(),
     });
   });
 

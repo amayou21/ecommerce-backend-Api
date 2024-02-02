@@ -45,10 +45,9 @@ exports.createProductValidator = [
     .isLength({ max: 2000000 })
     .withMessage("Too long price"),
   check("priceAfterDescount")
-    .isNumeric()
     .optional()
     .toFloat()
-    .withMessage("price after descount must be a number")
+    // .withMessage("price after descount must be a number")
     .custom((val, { req }) => {
       if (req.body.price <= val) {
         throw new Error("price after descount must be lower than price");
@@ -57,8 +56,9 @@ exports.createProductValidator = [
     }),
   check("colors")
     .optional()
-    .isArray()
-    .withMessage("colors must be array of string"),
+    // .isArray()
+    // .withMessage("colors must be array of string")
+    ,
   check("imageCover").notEmpty().withMessage("Product image cover is required"),
   check("images")
     .optional()
