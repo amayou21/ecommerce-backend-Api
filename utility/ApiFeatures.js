@@ -29,7 +29,7 @@ class ApiFeatures {
       });
     } else {
       // get products
-      this.mongooseQuery = this.mongooseQuery.find(quertStr);
+      this.mongooseQuery = this.mongooseQuery.find();
     }
     return this;
   }
