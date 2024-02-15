@@ -5,34 +5,34 @@ class ApiFeatures {
   }
 
   // @desc fieltering
-  fielter() {
-    // 1) fieltring
-    const queryStringObjc = { ...this.queryStr };
-    const execludFields = ["page", "limit", "sort", "field"];
-    execludFields.forEach((val) => delete queryStringObjc[val]);
+  // fielter() {
+  //   // 1) fieltring
+  //   const queryStringObjc = { ...this.queryStr };
+  //   const execludFields = ["page", "limit", "sort", "field"];
+  //   execludFields.forEach((val) => delete queryStringObjc[val]);
 
-    // Apply filteration using [gte,gt,lte,lt]
-    let quertStr = JSON.stringify(queryStringObjc);
+  //   // Apply filteration using [gte,gt,lte,lt]
+  //   let quertStr = JSON.stringify(queryStringObjc);
 
-    quertStr = JSON.parse(
-      quertStr.replace(/\b(gte|gt|lte|lt)\b/g, (val) => `$${val}`)
-    );
+  //   quertStr = JSON.parse(
+  //     quertStr.replace(/\b(gte|gt|lte|lt)\b/g, (val) => `$${val}`)
+  //   );
 
-    if (this.queryStr.keyword) {
-      // searching
-      this.mongooseQuery = this.mongooseQuery.find({
-        $or: [
-          { title: { $regex: this.queryStr.keyword, $options: "i" } }, // 'i' for case-insensitive
-          { description: { $regex: this.queryStr.keyword, $options: "i" } },
-          { name: { $regex: this.queryStr.keyword, $options: "i" } },
-        ],
-      });
-    } else {
-      // get products
-      this.mongooseQuery = this.mongooseQuery.find();
-    }
-    return this;
-  }
+  //   if (this.queryStr.keyword) {
+  //     // searching
+  //     this.mongooseQuery = this.mongooseQuery.find({
+  //       $or: [
+  //         { title: { $regex: this.queryStr.keyword, $options: "i" } }, // 'i' for case-insensitive
+  //         { description: { $regex: this.queryStr.keyword, $options: "i" } },
+  //         { name: { $regex: this.queryStr.keyword, $options: "i" } },
+  //       ],
+  //     });
+  //   } else {
+  //     // get products
+  //     this.mongooseQuery = this.mongooseQuery.find();
+  //   }
+  //   return this;
+  // }
 
   // @desc sorting
   sort() {
@@ -61,9 +61,10 @@ class ApiFeatures {
   paginate(docemuntCount) {
     // 2) pagination
     const page = this.queryStr.page * 1 || 1;
-    const limit = this.queryStr.limit * 1 || 5;
+    const limit = this.queryStr.limit * 1 || 50;
     const skip = (page - 1) * limit;
     const endIndex = page * limit;
+    this.mongooseQuery = this.mongooseQuery.skip(skip).limit(limit);
 
     const pagination = {};
     pagination.currentPage = page;
@@ -78,7 +79,6 @@ class ApiFeatures {
     }
 
     this.paginationResult = pagination;
-    this.mongooseQuery.skip(skip).limit(limit);
     return this;
   }
 }

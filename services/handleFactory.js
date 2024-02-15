@@ -8,20 +8,29 @@ exports.getAll = (model) =>
     req.params.categoryId
       ? (filterObject.category = req.params.categoryId)
       : (filterObject = {});
+
+
+    if (req.query.keyword) {
+      const keywordRegex = new RegExp(req.query.keyword, 'i');
+      filterObject.$or = [
+        { name: { $regex: keywordRegex } },
+        { title: { $regex: keywordRegex } },
+        { description: { $regex: keywordRegex } },]
+    }
+
     //@desc  documents count
-    const docemuntCount = await model.countDocuments();
+    const docemuntCount = await model.countDocuments(filterObject);
 
     const apiFeatures = new ApiFeatures(model.find(filterObject), req.query)
-      .fielter()
+      // .fielter()
       .paginate(docemuntCount)
       .sort()
       .limitFields();
-
     const { paginationResult, mongooseQuery } = apiFeatures;
     const documents = await mongooseQuery;
     res.status(200).json({
       paginationResult,
-      result: documents.length,
+      result: docemuntCount,
       documents: documents.reverse(),
     });
   });
