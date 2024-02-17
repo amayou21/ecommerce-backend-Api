@@ -5,34 +5,34 @@ class ApiFeatures {
   }
 
   // @desc fieltering
-  // fielter() {
-  //   // 1) fieltring
-  //   const queryStringObjc = { ...this.queryStr };
-  //   const execludFields = ["page", "limit", "sort", "field"];
-  //   execludFields.forEach((val) => delete queryStringObjc[val]);
+  fielter() {
+    // 1) fieltring
+    const queryStringObjc = { ...this.queryStr };
+    const execludFields = ["page", "limit", "sort", "field"];
+    execludFields.forEach((val) => delete queryStringObjc[val]);
 
-  //   // Apply filteration using [gte,gt,lte,lt]
-  //   let quertStr = JSON.stringify(queryStringObjc);
+    // Apply filteration using [gte,gt,lte,lt]
+    let quertS = JSON.stringify(queryStringObjc);
 
-  //   quertStr = JSON.parse(
-  //     quertStr.replace(/\b(gte|gt|lte|lt)\b/g, (val) => `$${val}`)
-  //   );
-
-  //   if (this.queryStr.keyword) {
-  //     // searching
-  //     this.mongooseQuery = this.mongooseQuery.find({
-  //       $or: [
-  //         { title: { $regex: this.queryStr.keyword, $options: "i" } }, // 'i' for case-insensitive
-  //         { description: { $regex: this.queryStr.keyword, $options: "i" } },
-  //         { name: { $regex: this.queryStr.keyword, $options: "i" } },
-  //       ],
-  //     });
-  //   } else {
-  //     // get products
-  //     this.mongooseQuery = this.mongooseQuery.find();
-  //   }
-  //   return this;
-  // }
+    quertS = JSON.parse(
+      quertS.replace(/\b(gte|gt|lte|lt)\b/g, (val) => `$${val}`)
+    );
+    this.mongooseQuery = this.mongooseQuery.find(quertS);
+    // if (this.queryStr.keyword) {
+    //   // searching
+    //   this.mongooseQuery = this.mongooseQuery.find({
+    //     $or: [
+    //       { title: { $regex: this.queryStr.keyword, $options: "i" } }, // 'i' for case-insensitive
+    //       { description: { $regex: this.queryStr.keyword, $options: "i" } },
+    //       { name: { $regex: this.queryStr.keyword, $options: "i" } },
+    //     ],
+    //   });
+    // } else {
+    //   // get products
+    //   this.mongooseQuery = this.mongooseQuery.find();
+    // }
+    return this;
+  }
 
   // @desc sorting
   sort() {

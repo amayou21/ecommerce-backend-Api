@@ -22,7 +22,7 @@ exports.getAll = (model) =>
     const docemuntCount = await model.countDocuments(filterObject);
 
     const apiFeatures = new ApiFeatures(model.find(filterObject), req.query)
-      // .fielter()
+      .fielter()
       .paginate(docemuntCount)
       .sort()
       .limitFields();
@@ -30,7 +30,7 @@ exports.getAll = (model) =>
     const documents = await mongooseQuery;
     res.status(200).json({
       paginationResult,
-      result: docemuntCount,
+      result: documents.length,
       documents: documents.reverse(),
     });
   });
