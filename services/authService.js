@@ -13,7 +13,7 @@ const createToken = (payload) =>
 
 
 // @desc     sign up
-// @route    /api/v1/auth/signup
+// @route    POST /api/v1/auth/signup
 // @access   Public
 exports.signUp = asyncHandler(async (req, res, next) => {
     // @desc create user
@@ -35,7 +35,7 @@ exports.signUp = asyncHandler(async (req, res, next) => {
 
 
 // @desc     login
-// @route    /api/v1/auth/login
+// @route    POST /api/v1/auth/login
 // @access   Public
 exports.login = asyncHandler(async (req, res, next) => {
     // @desc check if user exist
@@ -50,4 +50,27 @@ exports.login = asyncHandler(async (req, res, next) => {
     const token = createToken({ userID: user._id, email: user.email })
 
     res.status(200).json({ data: user, token })
+})
+
+
+
+// @desc     protect
+// @route    POST /api/v1/
+// @access   Public
+exports.protect = asyncHandler(async (req, res, next) => {
+    // 1) check if token exist, if token exist get it
+    let token;
+    if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
+        token = req.headers.authorization.split(" ")[1]
+    }
+
+    if (!token) {
+        return next(new ApiError("You are not login, please login to get access this route", 401))
+    }
+
+    // 2) check if this token valid (verify token)
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY)
+    console.log(decoded);
+    // 3) check if token iser exist
+    // 4) check if user change password after tokent created
 })

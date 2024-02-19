@@ -10,7 +10,7 @@ const ApiError = require("./utility/apiError");
 const globalError = require("./middleware/globalError");
 const ProductRoute = require("./routes/productRoute");
 const userRoute = require("./routes/userRoute");
-const authRoute = require("./routes/authRoute")
+const authRoute=require("./routes/authRoute")
 const cors = require("cors");
 // if you create file with the name "config.env" u gonna have to set the dote env configs
 dotenv.config({ path: "config.env" });
