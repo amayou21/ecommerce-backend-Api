@@ -1,11 +1,11 @@
 const express = require("express");
 
 const {
-    signUpValidator, loginValidator
+    signUpValidator, loginValidator, resetPasswordValidator
 } = require("../utility/validators/authValidator");
 
 const {
-    signUp, login
+    signUp, login, forgotPassword, verifyPassResetCode, resetPassword
 } = require("../services/authService");
 
 const router = express.Router();
@@ -19,4 +19,8 @@ router.route("/signup").post(signUpValidator, signUp);
 //     .delete(deleteUserValidator, deleteUser);
 
 router.route("/login").post(loginValidator, login)
+router.route("/forgotPassword").post(forgotPassword, verifyPassResetCode)
+router.route("/verifyPassResetCode").post(verifyPassResetCode)
+router.route("/resetPassword").put(resetPasswordValidator, resetPassword)
+
 module.exports = router;

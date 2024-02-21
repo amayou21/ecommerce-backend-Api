@@ -171,3 +171,75 @@ exports.deleteUserValidator = [
         .withMessage("invalid User Id format"),
     ValidatoreMiddleware,
 ];
+
+
+
+
+exports.updateLoggedUserPasswordValidator = [
+
+    // body("curentpassword")
+    //     .notEmpty()
+    //     .withMessage("you must enter current password"),
+
+    body("passwordConfirm")
+        .notEmpty()
+        .withMessage("you must confirm password"),
+
+    body("password")
+        .notEmpty()
+        .withMessage("you must enter new password")
+        .isLength({ min: 6 })
+        .withMessage("new password must br at least 6 chatacyers")
+        // @desc verify confirm password
+        .custom((val, { req }) => {
+            if (val !== req.body.passwordConfirm) {
+                throw new Error("inccorect confirm password");
+            }
+            return true;
+        }),
+    ValidatoreMiddleware,
+
+]
+
+
+
+
+exports.updateLoggedUserValidator = [
+    check("name")
+        .optional()
+        // check User name value
+        .custom(val => {
+            if (!isNaN(val) || !isNaN(parseFloat(val)))
+                throw new Error(`User name must be a string`)
+            return true
+        })
+        .custom((val, { req }) => {
+            req.body.slug = slugify(val);
+            return true;
+        }),
+
+    check("email")
+        .optional()
+        .isEmail()
+        .withMessage("invalid email address")
+
+        // check if this email alredy exist
+        .custom(async (value) => {
+            const existingCategory = await userModel.findOne({ email: value });
+            if (existingCategory) {
+                throw new Error("This email already exists");
+            }
+            return true;
+        }),
+    check("phone")
+        .optional()
+        .isMobilePhone(["ar-MA", "ar-EG"])
+        .withMessage("invalid phone number accept just Morroco and Egypt phone numbers ")
+    ,
+    // check("profileImg")
+    //     .optional(),
+
+    // check("role")
+    //     .optional(),
+    ValidatoreMiddleware,
+];
