@@ -1,7 +1,7 @@
 const express = require("express");
 
 const {
-    signUpValidator, loginValidator, resetPasswordValidator
+    signUpValidator, loginValidator, resetPasswordValidator, forgotPasswordValidator
 } = require("../utility/validators/authValidator");
 
 const {
@@ -19,7 +19,7 @@ router.route("/signup").post(signUpValidator, signUp);
 //     .delete(deleteUserValidator, deleteUser);
 
 router.route("/login").post(loginValidator, login)
-router.route("/forgotPassword").post(forgotPassword, verifyPassResetCode)
+router.route("/forgotPassword").post(forgotPasswordValidator, forgotPassword)
 router.route("/verifyPassResetCode").post(verifyPassResetCode)
 router.route("/resetPassword").put(resetPasswordValidator, resetPassword)
 

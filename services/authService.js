@@ -41,7 +41,7 @@ exports.login = asyncHandler(async (req, res, next) => {
     const user = await userModel.findOne({ email: req.body.email })
 
     if (!user || !(await bcrypt.compare(req.body.password, user.password))) {
-        return next(new ApiError("incorrect user email or password "))
+        return next(new ApiError("incorrect user email or password",200))
     }
 
     // @desc generate token
@@ -63,7 +63,7 @@ exports.protect = asyncHandler(async (req, res, next) => {
     }
 
     if (!token) {
-        return next(new ApiError("You are not login, please login to get access this route", 401))
+        return next(new ApiError("You are not login, please login to get access this route", 200))
     }
 
     // 2) check if this token valid (verify token)
@@ -110,7 +110,7 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
     // 1) get user by email
     const user = await userModel.findOne({ email: req.body.email })
     if (!user) {
-        return next(new ApiError(`there's no user with that email: ${req.body.email}`, 404))
+        return next(new ApiError(`there's no user with that email: ${req.body.email}`, 200))
     }
 
     // 2) if user exist, generate random 6 digits and save it in DB

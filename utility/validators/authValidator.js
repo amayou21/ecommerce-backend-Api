@@ -51,6 +51,10 @@ exports.signUpValidator = [
     check("passwordConfirm")
         .notEmpty()
         .withMessage("password confirm is required"),
+    check("phone")
+        .optional()
+        .isMobilePhone(["ar-MA", "ar-EG"])
+        .withMessage("invalid phone number accept just Morroco and Egypt phone numbers "),
     ValidatoreMiddleware,
 ];
 
@@ -65,6 +69,16 @@ exports.loginValidator = [
     check("password")
         .notEmpty()
         .withMessage("password is required"),
+    ValidatoreMiddleware,
+]
+
+
+exports.forgotPasswordValidator = [
+    check("email")
+        .notEmpty()
+        .withMessage("email is required")
+        .isEmail()
+        .withMessage("invalid email address"),
     ValidatoreMiddleware,
 ]
 
