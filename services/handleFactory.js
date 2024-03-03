@@ -70,13 +70,18 @@ exports.updateOnde = (model) =>
     res.status(200).json(document);
   });
 
-  exports.deleteOne = (model) =>
+
+exports.deleteOne = (model) =>
   asyncHandler(async (req, res, next) => {
     const document = await model.findByIdAndDelete(req.params.id);
 
     if (!document) {
-      return next(new ApiError(`No document with this id: ${req.params.id}`, 400));
+      return next(
+        new ApiError(`No document found for this id: ${req.params.id}`, 404)
+      );
     }
-
-    res.status(200).json({ mes: `The document with id: ${req.params.id} deleted successfully` });
+    // To trigger 'remove' event when deleting the document
+    document.remove();
+    // 204 no content
+    res.status(204).send();
   });
