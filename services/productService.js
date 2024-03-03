@@ -20,6 +20,7 @@ exports.resizeImage = resizeProductImages;
 // @access   Private
 exports.createProduct = factory.createOne(ProductModel);
 
+
 // @desc     get products
 // @route    get /api/v1/products
 // @access   Public
@@ -28,7 +29,7 @@ exports.getProducts = factory.getAll(ProductModel);
 // @desc     get spesific product
 // @route    get /apiv/products/:id
 // @access   Private
-exports.getProduct = factory.getOne(ProductModel);
+exports.getProduct = factory.getOne(ProductModel, "reviews");
 
 // @desc     updateProduct
 // @route    put /api/v1/product/:id

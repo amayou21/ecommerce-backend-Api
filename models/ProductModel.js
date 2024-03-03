@@ -71,9 +71,17 @@ const ProductSchema = new mongoose.Schema(
       default: 0,
     },
   },
-  { timestamps: true }
+  { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
 
+
+// @desc populate reviews of this product using virtual relation
+ProductSchema.virtual("reviews", {
+  ref: "Review",
+  foreignField: "product",
+  localField: '_id'
+})
+// @desc populate category
 ProductSchema.pre(/^find/, function (next) {
   this.populate({
     path: "category",
@@ -82,6 +90,8 @@ ProductSchema.pre(/^find/, function (next) {
   next();
 });
 
+
+// @desc populate band
 ProductSchema.pre(/^find/, function (next) {
   this.populate({
     path: "brand",

@@ -4,24 +4,23 @@ const ApiFeatures = require("../utility/ApiFeatures");
 
 exports.getAll = (model) =>
   asyncHandler(async (req, res, next) => {
-    let filterObject = {};
-    req.params.categoryId
-      ? (filterObject.category = req.params.categoryId)
-      : (filterObject = {});
-
-
-    if (req.query.keyword) {
-      const keywordRegex = new RegExp(req.query.keyword, 'i');
-      filterObject.$or = [
-        { name: { $regex: keywordRegex } },
-        { title: { $regex: keywordRegex } },
-        { description: { $regex: keywordRegex } },]
+    let filter = {};
+    if (req.filterObj) {
+      filter = req.filterObj
     }
 
-    //@desc  documents count
-    const docemuntCount = await model.countDocuments(filterObject);
+    // if (req.query.keyword) {
+    //   const keywordRegex = new RegExp(req.query.keyword, 'i');
+    //   filterObject.$or = [
+    //     { name: { $regex: keywordRegex } },
+    //     { title: { $regex: keywordRegex } },
+    //     { description: { $regex: keywordRegex } },]
+    // }
 
-    const apiFeatures = new ApiFeatures(model.find(filterObject), req.query)
+    //@desc  documents count
+    const docemuntCount = await model.countDocuments(filter);
+
+    const apiFeatures = new ApiFeatures(model.find(filter), req.query)
       .fielter()
       .paginate(docemuntCount)
       .sort()
@@ -41,9 +40,16 @@ exports.createOne = (model) =>
     res.status(201).json(document);
   });
 
-exports.getOne = (model) =>
+exports.getOne = (model, populateOpt) =>
   asyncHandler(async (req, res, next) => {
-    const document = await model.findById(req.params.id);
+
+    // @desc 1) build query
+    let query = model.findById(req.params.id)
+    if (populateOpt) {
+      query = query.populate(populateOpt)
+    }
+    // @desc 2) exicute query
+    const document = await query
     !document
       ? next(new ApiError(`no document with this id : ${req.params.id}`, 400))
       : res.status(200).json(document);
@@ -51,20 +57,26 @@ exports.getOne = (model) =>
 
 exports.updateOnde = (model) =>
   asyncHandler(async (req, res, next) => {
-    const documeent = await model.findByIdAndUpdate(req.params.id, req.body, {
+    const document = await model.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
     });
-    !documeent
-      ? next(new ApiError(`no documeent with this id : ${req.params.id}`, 400))
-      : res.status(200).json(documeent);
+
+    if (!document) {
+      next(new ApiError(`no document with this id : ${req.params.id}`, 400))
+    }
+
+    // Trigger "save" event when update document
+    document.save()
+    res.status(200).json(document);
   });
 
-exports.deleteOne = (model) =>
+  exports.deleteOne = (model) =>
   asyncHandler(async (req, res, next) => {
     const document = await model.findByIdAndDelete(req.params.id);
-    !document
-      ? next(new ApiError(`no document with this id : ${req.params.id}`, 400))
-      : res.status(200).json({
-        mes: `the document with id :${req.params.id} deleted successfully`,
-      });
+
+    if (!document) {
+      return next(new ApiError(`No document with this id: ${req.params.id}`, 400));
+    }
+
+    res.status(200).json({ mes: `The document with id: ${req.params.id} deleted successfully` });
   });

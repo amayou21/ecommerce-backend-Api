@@ -21,9 +21,24 @@ const sharp = require("sharp");
 //   next();
 // });
 
-// @desc   set category ID if I create a subcategory in spesific category
+// NESTED ROUTE
+// @desc   (create)
 exports.setCategoryID = asyncHandler(async (req, res, next) => {
   req.params.categoryId ? (req.body.category = req.params.categoryId) : null;
+  next();
+});
+
+
+
+
+// NESTED ROUTE
+// GET /api/v1/categories/:categoryID/subCategories
+exports.createFilterObj = asyncHandler(async (req, res, next) => {
+  let filterObject = {};
+  if (req.params.categoryId) {
+    filterObject = { category: req.params.categoryId }
+  }
+  req.filterObj = filterObject
   next();
 });
 

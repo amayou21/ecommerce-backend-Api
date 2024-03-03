@@ -6,6 +6,7 @@ const {
   updateSpesificSubCategory,
   deleteSpesificSubCategory,
   setCategoryID,
+  createFilterObj,
   // uploadImage,
   // resizeImage,
 } = require("../services/SubCategoryService");
@@ -21,9 +22,9 @@ const router = express.Router({ mergeParams: true });
 
 router
   .route("/")
-  .get(getSubCategoryValidator, getSubCategories)
+  .get(createFilterObj, getSubCategories)
   .post(
-    protect, allowTo("admin", "manager"),
+    // protect, allowTo("admin", "manager"),
     // uploadImage,
     // resizeImage,
     setCategoryID,
@@ -34,7 +35,7 @@ router
   .route("/:id")
   .get(getSpesificSubCategoryValidator, getSpesificSubCategory)
   .put(
-    protect, allowTo("admin", "manager"),
+    // protect, allowTo("admin", "manager"),
     // uploadImage,
     // resizeImage,
     updateSpesificSubCategoryValidator,

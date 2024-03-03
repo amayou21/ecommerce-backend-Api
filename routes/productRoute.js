@@ -1,4 +1,5 @@
 const express = require("express");
+const reviewsRoute = require("../routes/reviewsRoute")
 const {
   getProducts,
   createProduct,
@@ -17,6 +18,11 @@ const {
 const { protect, allowTo } = require("../services/authService");
 
 const router = express.Router();
+
+// POST /products/hskjdcnxkdfjd/reviews
+// GET  /products/hskjdcnxkdfjd/reviews
+router.use("/:productID/reviews", reviewsRoute)
+
 
 router
   .route("/")

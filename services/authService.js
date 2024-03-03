@@ -41,7 +41,7 @@ exports.login = asyncHandler(async (req, res, next) => {
     const user = await userModel.findOne({ email: req.body.email })
 
     if (!user || !(await bcrypt.compare(req.body.password, user.password))) {
-        return next(new ApiError("incorrect user email or password",200))
+        return next(new ApiError("incorrect user email or password", 200))
     }
 
     // @desc generate token
@@ -180,12 +180,12 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
     const user = await userModel.findOne({ email: req.body.email })
 
     if (!user) {
-        return next(new ApiError("thers's no user with this email", 404))
+        return next(new ApiError("thers's no user with this email", 200))
     }
 
     // 2) check if reset code verified
     if (!user.passwordResetVerified) {
-        return next(new ApiError("Reset code not verified", 400))
+        return next(new ApiError("Reset code not verified", 200))
 
     }
 

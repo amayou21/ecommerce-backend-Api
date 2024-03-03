@@ -52,11 +52,11 @@ exports.createSubCategoryValidator = [
   ValidatoreMiddleware,
 ];
 
-exports.getSubCategoryValidator = [
-  check("page").optional().isNumeric().withMessage("Invalid page number!"),
-  check("limit").optional().isNumeric().withMessage("Invalid limit number!"),
-  ValidatoreMiddleware,
-];
+// exports.getSubCategoryValidator = [
+//   check("page").optional().isNumeric().withMessage("Invalid page number!"),
+//   check("limit").optional().isNumeric().withMessage("Invalid limit number!"),
+//   ValidatoreMiddleware,
+// ];
 
 exports.getSpesificSubCategoryValidator = [
   check("id").isMongoId().withMessage("Invalid SubCategory Id format"),
