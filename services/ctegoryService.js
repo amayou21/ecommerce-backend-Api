@@ -30,7 +30,7 @@ exports.resizeImage = asyncHandler(async (req, res, next) => {
 exports.getCategories = factory.getAll(CategoryModel);
 
 // @desc    create category
-// @route   post apiv/categories
+// @route   post api/v1/categories
 // @access  Private
 exports.createCategories = factory.createOne(CategoryModel);
 

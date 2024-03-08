@@ -1,6 +1,6 @@
-const mongoos = require("mongoose")
+const mongoose = require("mongoose")
 const bcrypt = require("bcryptjs")
-const userSChema = new mongoos.Schema({
+const userSChema = new mongoose.Schema({
     name: {
         type: String,
         trim: true,
@@ -34,7 +34,15 @@ const userSChema = new mongoos.Schema({
     active: {
         type: Boolean,
         default: true
-    }
+    },
+
+    //  child reference (one to many)
+    wishlist: [
+        {
+            type: mongoose.Schema.ObjectId,
+            ref: "Product"
+        },
+    ],
 }, { timestamps: true })
 
 
@@ -50,4 +58,4 @@ userSChema.pre("save", async function (next) {
 })
 
 
-module.exports = mongoos.model("User", userSChema);
+module.exports = mongoose.model("User", userSChema);

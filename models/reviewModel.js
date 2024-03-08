@@ -15,14 +15,15 @@ const reviewSchema = new mongoose.Schema({
         ref: "User",
         required: [true, "Review must belong to user"]
     },
+
+
+    // parent reference (one to many)
     product: {
         type: mongoose.Schema.ObjectId,
         ref: "Product",
         required: [true, "Review must belong to product"]
     }
 }, { timestamps: true })
-
-
 
 reviewSchema.pre(/^find/, function (next) {
     this.populate({
@@ -34,7 +35,10 @@ reviewSchema.pre(/^find/, function (next) {
 
 reviewSchema.statics.calcRatingsAverageAndQuantity = async function (productID) {
     const result = await this.aggregate([
+        // stage 1
         { $match: { product: productID } },
+
+        // stage 2
         {
             $group: {
                 _id: "product",
@@ -58,7 +62,6 @@ reviewSchema.statics.calcRatingsAverageAndQuantity = async function (productID) 
             }
         )
     }
-    console.log(result.length);
 }
 
 reviewSchema.post("save", async function () {

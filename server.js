@@ -12,6 +12,7 @@ const ProductRoute = require("./routes/productRoute");
 const userRoute = require("./routes/userRoute");
 const authRoute = require("./routes/authRoute")
 const reviewsRoute = require("./routes/reviewsRoute")
+const wishlistRoute = require("./routes/wislistRoute")
 const cors = require("cors");
 // if you create file with the name "config.env" u gonna have to set the dote env configs
 dotenv.config({ path: "config.env" });
@@ -47,6 +48,7 @@ app.use("/api/v1/products", ProductRoute);
 app.use("/api/v1/users", userRoute);
 app.use("/api/v1/auth", authRoute);
 app.use("/api/v1/reviews", reviewsRoute);
+app.use("/api/v1/wishlist", wishlistRoute);
 
 app.all("*", (req, res, next) => {
   next(new ApiError(`we can't fin this route : ${req.originalUrl}`, 400));
