@@ -24,7 +24,7 @@ exports.AddProductToWishlist = asyncHandlaer(async (req, res, next) => {
 
 
 // @desc    Add product to wishlist
-// @route   POST api/v1/wishlist/:productID
+// @route   DELETE api/v1/wishlist/:productID
 // @access  Protected/User
 exports.removeProductFomWishlist = asyncHandlaer(async (req, res, next) => {
 
