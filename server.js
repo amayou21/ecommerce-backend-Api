@@ -3,18 +3,9 @@ const express = require("express");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
 const dbConnection = require("./config/databse");
-const categoryRoute = require("./routes/categoryRoute");
-const subcategoryRoute = require("./routes/subCategoryRoute");
-const brandsRoute = require("./routes/brandsRoute");
 const ApiError = require("./utility/apiError");
 const globalError = require("./middleware/globalError");
-const ProductRoute = require("./routes/productRoute");
-const userRoute = require("./routes/userRoute");
-const authRoute = require("./routes/authRoute")
-const reviewsRoute = require("./routes/reviewsRoute")
-const wishlistRoute = require("./routes/wislistRoute")
-const addressesRoute = require("./routes/addressesRoute")
-const couponsRoute = require("./routes/couponRoute")
+const mountError = require("./routes")
 const cors = require("cors");
 // if you create file with the name "config.env" u gonna have to set the dote env configs
 dotenv.config({ path: "config.env" });
@@ -43,16 +34,7 @@ if (process.env.MODE === "developement") {
 }
 
 // Mount routes
-app.use("/api/v1/categories", categoryRoute);
-app.use("/api/v1/subcategories", subcategoryRoute);
-app.use("/api/v1/brands", brandsRoute);
-app.use("/api/v1/products", ProductRoute);
-app.use("/api/v1/users", userRoute);
-app.use("/api/v1/auth", authRoute);
-app.use("/api/v1/reviews", reviewsRoute);
-app.use("/api/v1/wishlist", wishlistRoute);
-app.use("/api/v1/addresses", addressesRoute);
-app.use("/api/v1/coupons", couponsRoute);
+mountError(app)
 
 app.all("*", (req, res, next) => {
   next(new ApiError(`we can't fin this route : ${req.originalUrl}`, 400));
