@@ -17,7 +17,7 @@ exports.createCategoryValidator = [
       req.body.slug = slugify(val);
       return true;
     })
-    // check if the name value
+    // check if the name value is a string
     .custom(val => {
       if (!isNaN(val) || !isNaN(parseFloat(val)))
         throw new Error(`category name must be a string`)
