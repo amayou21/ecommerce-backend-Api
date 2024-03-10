@@ -2,6 +2,7 @@
 const { check } = require("express-validator");
 const ValidatoreMiddleware = require("../../middleware/validatoreMiddleware");
 const cartModel = require("../../models/cartModel");
+const couponModel = require("../../models/couponModel");
 
 exports.creatCartItemValidator = [
     // @desc  1-rules
@@ -38,5 +39,23 @@ exports.updateItemQuantityValidator = [
     check("itemId")
         .isMongoId()
         .withMessage("Invalid product ID"),
+    ValidatoreMiddleware,
+]
+
+
+exports.applyCouponValidator = [
+    check("coupon")
+        .notEmpty()
+        .withMessage("coupon name is required to apply it")
+        .custom(async (val, { req }) => {
+            const coupon = await couponModel.findOne({
+                name: val, expire: { $gt: Date.now() }
+            })
+            
+            if (!coupon) {
+                throw new Error("Invalid coupon or expired")
+            }
+            return true
+        }),
     ValidatoreMiddleware,
 ]
