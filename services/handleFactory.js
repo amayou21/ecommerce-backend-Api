@@ -70,7 +70,6 @@ exports.updateOnde = (model) =>
     res.status(200).json(document);
   });
 
-
 exports.deleteOne = (model) =>
   asyncHandler(async (req, res, next) => {
     const document = await model.findByIdAndDelete(req.params.id);

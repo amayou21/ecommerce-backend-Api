@@ -52,3 +52,24 @@ exports.crateCashOrder = asyncHandler(async (req, res, next) => {
         res.status(200).json({ status: "success", message: "order created successfully", date: order })
     }
 })
+
+
+
+// @desc set filter object
+exports.setOrderFilterObj = asyncHandler(async (req, res, next) => {
+    if (req.user.role === "user") {
+        req.filterObj = { user: req.user._id }
+    }
+    next()
+})
+
+// @desc    get cash orders
+// @route   GET api/v1/orders/
+// @access  Protected/User-Admin-Manager
+exports.getOrders = factory.getAll(orderModel)
+
+
+// @desc    get spesific cash order
+// @route   GET api/v1/orders/:id
+// @access  Protected/User-Admin-Manager
+exports.getOrder = factory.getOne(orderModel)

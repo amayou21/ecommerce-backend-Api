@@ -1,18 +1,20 @@
 const express = require("express");
 const { protect, allowTo } = require("../services/authService");
-const { crateCashOrder } = require("../services/orderService");
-const { crateCashOrderValidator } = require("../utility/validators/orderValidator");
+const { crateCashOrder, setOrderFilterObj, getOrders, getOrder } = require("../services/orderService");
+const { crateCashOrderValidator, getOrderValidator } = require("../utility/validators/orderValidator");
 
 const router = express.Router();
 
 router.route("/:cartId")
-    // .get()
     .post(protect, allowTo("user"), crateCashOrderValidator, crateCashOrder);
 
-// router
-//     .route("/:id")
+router.route("/").get(protect, allowTo("user", "admin", "manager"), setOrderFilterObj, getOrders)
 
-//     .get()
+
+router
+    .route("/:id")
+
+    .get(protect, allowTo("user", "admin", "manager"),getOrderValidator,getOrder)
 
 //     .put()
 
