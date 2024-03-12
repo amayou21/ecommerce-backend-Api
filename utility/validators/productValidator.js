@@ -4,6 +4,8 @@ const { CategoryModel } = require("../../models/CategoryModels");
 const SUbCategoryModele = require("../../models/SUbCategoryModele");
 const { default: slugify } = require("slugify");
 const ProductModel = require("../../models/ProductModel")
+
+
 exports.createProductValidator = [
   check("title")
     .notEmpty()

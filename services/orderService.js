@@ -48,5 +48,7 @@ exports.crateCashOrder = asyncHandler(async (req, res, next) => {
 
         // 5) clear cart depend on cartid
         await cartModel.findByIdAndDelete(req.params.cartId)
+
+        res.status(200).json({ status: "success", message: "order created successfully", date: order })
     }
 })
