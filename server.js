@@ -7,6 +7,7 @@ const ApiError = require("./utility/apiError");
 const globalError = require("./middleware/globalError");
 const mountError = require("./routes")
 const cors = require("cors");
+const compression=require("compression")
 
 // if you create file with the name "config.env" u gonna have to set the dote env configs
 dotenv.config({ path: "config.env" });
@@ -26,7 +27,12 @@ const corsOptions = {
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 
+// allow other domain to access this pplication
 app.use(cors(corsOptions));
+
+// compress all responses
+app.use(compression())
+
 app.use(express.static(path.join(__dirname, "uploads")));
 
 if (process.env.MODE === "developement") {

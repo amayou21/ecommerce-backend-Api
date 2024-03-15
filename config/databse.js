@@ -5,4 +5,4 @@ const dbConnection = () => {
     console.log(`Database Connected: ${conn.connection.host}`);
   });
 };
-module.exports = dbConnection;
+module.exports = dbConnection;  
