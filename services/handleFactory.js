@@ -61,6 +61,7 @@ exports.updateOnde = (model) =>
       new: true,
     });
 
+
     if (!document) {
       next(new ApiError(`no document with this id : ${req.params.id}`, 400))
     }

@@ -6,7 +6,7 @@ const factory = require("./handleFactory");
 // GET /api/v1/products/:productID/reviews
 exports.createFilterObj = (req, res, next) => {
     let filterObject = {};
-    if (req.params.categoryId) {
+    if (req.params.productID) {
         filterObject = { product: req.params.productID }
     }
     req.filterObj = filterObject

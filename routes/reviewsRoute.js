@@ -33,8 +33,8 @@ router
   .route("/:id")
 
   .get(getReviewValidator, getReview)
-
-  .put(protect, allowTo("user"), updateReviewValidator, updateReview)
+  // 
+  .put(protect, allowTo("user"),updateReviewValidator, updateReview)
 
   .delete(protect, allowTo("user", "manager", "admin"), deleteReviewValidator, deleteReview);
 
