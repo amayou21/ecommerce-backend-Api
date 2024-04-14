@@ -24,6 +24,7 @@ exports.createReviewValidator = [
       const review = await ReviewModel.findOne(
         { user: req.user._id.toString(), product: req.body.product }
       )
+      
       if (req.body.user !== req.user._id.toString()) {
         throw new Error("You can't created a review using other user ID");
       }
