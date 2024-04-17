@@ -22,4 +22,12 @@ exports.removeProductFomWishlistValidator = [
     check("productID")
         .isMongoId()
         .withMessage("invalid product id")
+        .custom(async (val, { req }) => {
+            console.log(val);
+            const prod = await productModel.findById(val)
+            if (!prod) {
+                throw new Error(`there is no product with this ID : ${val}`)
+            }
+            return true
+        }), ValidatoreMiddleware,
 ]
